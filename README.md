@@ -17,3 +17,44 @@ Step 2. Add the dependency in app/build.gradle
 	dependencies {
 	        api 'com.github.jasonpearysamuel:BiometricUtil:Tag'
 	}
+
+
+Step 3. How to use
+
+class MainActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.main_activity)
+        btn_finger.setOnClickListener {
+            startFinger()
+        }
+    }
+
+    private fun startFinger() {
+
+        val biometricPromptUtil = BiometricPromptUtil(this)
+
+        if (!biometricPromptUtil.supportFingerprint()) {
+            ToastUtil.showToast(this, "您的手机不支持指纹功能")
+            return
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            biometricPromptUtil.startBiometricPromptIn28()
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
+            biometricPromptUtil.startBiometricPromptIn23()
+        }
+
+        // 指纹识别返回数据
+        biometricPromptUtil.addFingerResultListener(object :
+            BiometricPromptUtil.OnFingerResultListener {
+            override fun fingerResult(result: Boolean) {
+                if (result) {
+                    // 指纹正确
+
+                }
+            }
+        })
+    }
+}
