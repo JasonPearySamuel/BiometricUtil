@@ -15,7 +15,7 @@ Add it in your root build.gradle at the end of repositories:
 Step 2. Add the dependency in app/build.gradle
 
 	dependencies {
-	        api 'com.github.jasonpearysamuel:BiometricUtil:1.0.0'
+	        api 'com.github.jasonpearysamuel:BiometricUtil:master-SNAPSHOT'
 	}
 
 
