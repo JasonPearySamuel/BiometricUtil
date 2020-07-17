@@ -73,14 +73,17 @@ class BiometricPromptUtil(val mContext: Context) {
      * 安卓9.0及以上的指纹识别
      */
     @RequiresApi(Build.VERSION_CODES.P)
-    fun startBiometricPromptIn28() {
+    fun startBiometricPromptIn28(titleStr: String, description: String, cancelStr: String) {
         val mBiometricPrompt = BiometricPrompt.Builder(mContext)
-                .setTitle("指纹验证")
-                .setDescription("扫描指纹，验证身份")
-                .setNegativeButton("取消", mContext.getMainExecutor(), DialogInterface.OnClickListener { dialogInterface, i ->
+            .setTitle(titleStr)
+            .setDescription(description)
+            .setNegativeButton(
+                cancelStr,
+                mContext.getMainExecutor(),
+                DialogInterface.OnClickListener { dialogInterface, i ->
                     // ToastUtil.showToast(mContext, "Cancel")
                 })
-                .build()
+            .build()
 
         val mCancellationSignal = CancellationSignal()
         mCancellationSignal.setOnCancelListener {
@@ -112,16 +115,20 @@ class BiometricPromptUtil(val mContext: Context) {
                 }
             }
         }
-        mBiometricPrompt.authenticate(mCancellationSignal, mContext.getMainExecutor(), mAuthenticationCallback)
+        mBiometricPrompt.authenticate(
+            mCancellationSignal,
+            mContext.getMainExecutor(),
+            mAuthenticationCallback
+        )
     }
 
     /**
      * 安卓6.0以上，9.0以下的指纹识别
      */
     @RequiresApi(Build.VERSION_CODES.M)
-    fun startBiometricPromptIn23() {
+    fun startBiometricPromptIn23(titleStr: String, cancelStr: String) {
         initKey()
-        initCipher()
+        initCipher(titleStr, cancelStr)
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
@@ -130,13 +137,16 @@ class BiometricPromptUtil(val mContext: Context) {
             keyStore = KeyStore.getInstance("AndroidKeyStore")
             keyStore.load(null)
             //秘钥生成器
-            val keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore")
-            val builder = KeyGenParameterSpec.Builder("DEFAULT_KEY_NAME",
-                    KeyProperties.PURPOSE_ENCRYPT or
-                            KeyProperties.PURPOSE_DECRYPT)
-                    .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
-                    .setUserAuthenticationRequired(false)
-                    .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
+            val keyGenerator =
+                KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore")
+            val builder = KeyGenParameterSpec.Builder(
+                "DEFAULT_KEY_NAME",
+                KeyProperties.PURPOSE_ENCRYPT or
+                        KeyProperties.PURPOSE_DECRYPT
+            )
+                .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
+                .setUserAuthenticationRequired(false)
+                .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
             keyGenerator.init(builder.build())
             keyGenerator.generateKey()
         } catch (e: java.lang.Exception) {
@@ -145,14 +155,17 @@ class BiometricPromptUtil(val mContext: Context) {
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
-    private fun initCipher() {
+    private fun initCipher(titleStr: String, cancelStr: String) {
         try {
             val key = keyStore.getKey("DEFAULT_KEY_NAME", null)
-            val cipher = Cipher.getInstance(KeyProperties.KEY_ALGORITHM_AES + "/"
-                    + KeyProperties.BLOCK_MODE_CBC + "/"
-                    + KeyProperties.ENCRYPTION_PADDING_PKCS7)
+            val cipher = Cipher.getInstance(
+                KeyProperties.KEY_ALGORITHM_AES + "/"
+                        + KeyProperties.BLOCK_MODE_CBC + "/"
+                        + KeyProperties.ENCRYPTION_PADDING_PKCS7
+            )
             cipher.init(Cipher.ENCRYPT_MODE, key)
             val fragment23 = FingerprintDialogFragment()
+            fragment23.setString(titleStr, cancelStr)
             fragment23.setCipher(cipher)
             fragment23.show((mContext as AppCompatActivity).supportFragmentManager, "fingerprint")
             fragment23.setOnFingerResultListener { result ->

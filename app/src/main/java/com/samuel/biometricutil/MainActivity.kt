@@ -31,9 +31,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            biometricPromptUtil.startBiometricPromptIn28()
+            biometricPromptUtil.startBiometricPromptIn28("指纹验证", "扫描指纹，验证身份", "取消")
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
-            biometricPromptUtil.startBiometricPromptIn23()
+            biometricPromptUtil.startBiometricPromptIn23("请验证指纹解锁", "取消")
         }
 
         // 指纹识别返回数据

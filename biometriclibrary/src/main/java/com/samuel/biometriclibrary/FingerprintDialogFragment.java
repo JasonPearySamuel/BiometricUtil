@@ -32,6 +32,8 @@ public class FingerprintDialogFragment extends DialogFragment {
     private Activity mActivity;
 
     private TextView errorMsg;
+    private String mTitleStr;
+    private String mCancelStr;
 
     private OnFingerResultListener mOnFingerResultListener;
 
@@ -39,14 +41,6 @@ public class FingerprintDialogFragment extends DialogFragment {
      * 标识是否是用户主动取消的认证。
      */
     private boolean isSelfCancelled;
-
-    public void setCipher(Cipher cipher) {
-        mCipher = cipher;
-    }
-
-    public void setOnFingerResultListener(OnFingerResultListener onFingerResultListener) {
-        mOnFingerResultListener = onFingerResultListener;
-    }
 
     @Override
     public void onAttach(Context context) {
@@ -67,6 +61,7 @@ public class FingerprintDialogFragment extends DialogFragment {
         View v = inflater.inflate(R.layout.dialog_fingerprint, container, false);
         errorMsg = v.findViewById(R.id.error_msg);
         TextView cancel = v.findViewById(R.id.cancel);
+        cancel.setText(mCancelStr);
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,6 +69,7 @@ public class FingerprintDialogFragment extends DialogFragment {
                 stopListening();
             }
         });
+        ((TextView)v.findViewById(R.id.tv_title)).setText(mTitleStr);
         return v;
     }
 
@@ -84,11 +80,17 @@ public class FingerprintDialogFragment extends DialogFragment {
         startListening(mCipher);
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        // 停止指纹认证监听
-        stopListening();
+    public void setCipher(Cipher cipher) {
+        mCipher = cipher;
+    }
+
+    public void setOnFingerResultListener(OnFingerResultListener onFingerResultListener) {
+        mOnFingerResultListener = onFingerResultListener;
+    }
+
+    public void setString(String titleStr, String cancelStr) {
+        mTitleStr = titleStr;
+        mCancelStr = cancelStr;
     }
 
     private void startListening(Cipher cipher) {
@@ -134,6 +136,13 @@ public class FingerprintDialogFragment extends DialogFragment {
                 }
             }
         }, null);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        // 停止指纹认证监听
+        stopListening();
     }
 
     private void stopListening() {
