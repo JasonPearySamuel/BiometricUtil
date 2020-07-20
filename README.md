@@ -64,8 +64,8 @@ It is suitable for fingerprint identification of Android 6.0 to Android 9.0+
 	    }
 	}
 	
-	<br/>
-	<br/>
+	<br>
+	<br>
 	// Java
 	public class MainJavaActivity extends AppCompatActivity {
 
