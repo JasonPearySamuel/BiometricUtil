@@ -26,6 +26,7 @@ It is suitable for fingerprint identification of Android 6.0 to Android 9.0+
 
 **步骤 3. 食用:**
 
+	// kotlin
 	class MainActivity : AppCompatActivity() {
 
 	    override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,10 +58,45 @@ It is suitable for fingerprint identification of Android 6.0 to Android 9.0+
 		    override fun fingerResult(result: Boolean) {
 			if (result) {
 			    // 指纹正确
-
 			}
 		    }
 		})
+	    }
+	}
+	
+	<br/>
+	<br/>
+	// Java
+	public class MainJavaActivity extends AppCompatActivity {
+
+	    @Override
+	    public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		startFinger();
+	    }
+
+	    public void startFinger() {
+		BiometricPromptUtil biometricPromptUtil = new BiometricPromptUtil(this);
+
+		if (!biometricPromptUtil.supportFingerprint()) {
+		    ToastUtil.showToast(this, "您的手机不支持指纹功能");
+		    return;
+		}
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+		    biometricPromptUtil.startBiometricPromptIn28("指纹验证", "扫描指纹，验证身份", "取消");
+		} else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
+		    biometricPromptUtil.startBiometricPromptIn23("请验证指纹解锁", "取消");
+		}
+
+		biometricPromptUtil.addFingerResultListener(new BiometricPromptUtil.OnFingerResultListener() {
+		    @Override
+		    public void fingerResult(boolean result) {
+			if (result) {
+			    // 指纹正确
+			}
+		    }
+		});
 	    }
 	}
 
