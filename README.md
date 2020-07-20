@@ -24,7 +24,7 @@ It is suitable for fingerprint identification of Android 6.0 to Android 9.0+
 	}
 
 
-**步骤 3. 开始食用:**
+**步骤 3. 食用:**
 
 	class MainActivity : AppCompatActivity() {
 
@@ -63,3 +63,7 @@ It is suitable for fingerprint identification of Android 6.0 to Android 9.0+
 		})
 	    }
 	}
+
+
+>本项目的简书地址，链接如下：
+>https://www.jianshu.com/p/5c0029374d47
