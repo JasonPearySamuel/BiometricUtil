@@ -6,7 +6,7 @@
 
 It is suitable for fingerprint identification of Android 6.0 to Android 9.0+
 
-#步骤 1. 在项目根目录的build.gradle中添加:
+**步骤 1. 在项目根目录的build.gradle中添加:**
 
 	allprojects {
 		repositories {
@@ -16,14 +16,14 @@ It is suitable for fingerprint identification of Android 6.0 to Android 9.0+
 	}
 
 
-###步骤 2. 在app/build.gradle中添加:
+**步骤 2. 在app/build.gradle中添加:**
 
 	dependencies {
 	        api 'com.github.jasonpearysamuel:BiometricUtil:v1.0'
 	}
 
 
-###步骤 3. 开始食用:
+**步骤 3. 开始食用:**
 
 	class MainActivity : AppCompatActivity() {
 
